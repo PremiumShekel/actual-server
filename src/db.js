@@ -1,4 +1,6 @@
 import Database from 'better-sqlite3';
+import fs from 'fs';
+import path from 'path';
 
 class WrappedDatabase {
   constructor(db) {
@@ -54,5 +56,17 @@ class WrappedDatabase {
 
 /** @param {string} filename */
 export default function openDatabase(filename) {
-  return new WrappedDatabase(new Database(filename));
+  // Absoluter Pfad zum Datenverzeichnis
+  const dataDir = '/opt/render/project/src/data';
+
+  // Sicherstellen, dass das Verzeichnis existiert
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+  }
+
+  // Vollständiger Pfad zur Datenbankdatei
+  const dbPath = path.join(dataDir, filename);
+
+  // Öffnen der Datenbank mit dem absoluten Pfad
+  return new WrappedDatabase(new Database(dbPath));
 }
