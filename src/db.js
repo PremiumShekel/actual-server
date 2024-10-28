@@ -40,7 +40,7 @@ class WrappedDatabase {
 export default function openDatabase(filename) {
   const dataDir = '/opt/render/project/src/data';
 
-  // Logging zur Überprüfung
+  // Verzeichnis sicherstellen
   console.log(`Überprüfe, ob das Verzeichnis "${dataDir}" existiert.`);
 
   if (!fs.existsSync(dataDir)) {
@@ -50,7 +50,8 @@ export default function openDatabase(filename) {
     console.log(`Verzeichnis "${dataDir}" existiert bereits.`);
   }
 
-  const dbPath = path.join(dataDir, filename);
+  // Pfad der Datenbankdatei korrekt festlegen
+  const dbPath = path.isAbsolute(filename) ? filename : path.join(dataDir, filename);
 
   // Log für den Datenbankpfad
   console.log(`Datenbank wird unter folgendem Pfad geöffnet: "${dbPath}"`);
